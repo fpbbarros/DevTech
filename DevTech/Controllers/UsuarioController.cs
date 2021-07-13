@@ -1,6 +1,7 @@
 using System.Text.Json;
 using System.Threading.Tasks;
 using DevTech.Models;
+using DevTech.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevTech.Controllers
@@ -11,11 +12,12 @@ namespace DevTech.Controllers
   public class UsuarioController : ControllerBase
   {
     [HttpGet]
-    public IActionResult Read()
+    public IActionResult Read([FromServices] IUsuarioRepository repository)
     {
-      Usuario usuario = new Usuario();     
+      User usuario = new User();     
+      repository.Create(usuario, "");
 
-      return Ok(JsonSerializer.Serialize<Usuario>(usuario));
+      return Ok(JsonSerializer.Serialize<User>(usuario));
     }
 
   }

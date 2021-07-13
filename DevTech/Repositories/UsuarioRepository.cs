@@ -3,47 +3,75 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using DevTech.Models;
 using Microsoft.AspNetCore.Identity;
+using Dapper;
+using Microsoft.Data.SqlClient;
+using System.Linq;
+using Microsoft.Extensions.Configuration;
+
 
 namespace DevTech.Repositories
 {
-    public interface IUsuarioRepository 
+    public interface IUsuarioRepository
     {
-      Task<IdentityResult> Create(Usuario usuario, string senha);
-      Task<Usuario> Delete(Guid id);  
-      Task Update(Usuario usuario);
-      Task<IEnumerable<Usuario>> Read(); 
-      Task<Usuario> ReadOne(Guid id); 
-      
+        Task<IdentityResult> Create(User usuario, string senha);
+        Task<User> Delete(Guid id);
+        Task Update(User usuario);
+        Task<IEnumerable<User>> Read();
+        Task<User> ReadOne(Guid id);
+
 
     }
 
-  public class UsuarioReposutory : IUsuarioRepository
-  {
-  
-    public Task<IdentityResult> Create(Usuario usuario, string senha)
+    public class UsuarioReposutory : IUsuarioRepository
     {
-      
-      throw new NotImplementedException();
-    }
 
-    public Task<Usuario> Delete(Guid id)
-    {
-      throw new NotImplementedException();
-    }
+        public IConfiguration _configuration;
 
-    public Task<IEnumerable<Usuario>> Read()
-    {
-      throw new NotImplementedException();
-    }
+        public UsuarioReposutory(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
-    public Task<Usuario> ReadOne(Guid id)
-    {
-      throw new NotImplementedException();
-    }
+        public async Task<IdentityResult> Create(User usuario, string senha)
+        {
 
-    public Task Update(Usuario usuario)
-    {
-      throw new NotImplementedException();
+            using (SqlConnection connection = new SqlConnection(_configuration.GetConnectionString("BaseIndicadores")))
+            {
+                try
+                {
+                    var teste = await connection.QueryAsync<User>
+                        ("select Id, CPF, Foto from [dbo].[AspNetUsers]");
+                }
+                catch (Exception ex)
+                {
+
+                    throw ex;
+                }
+
+
+            }
+
+            return null;
+        }
+
+        public Task<User> Delete(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<User>> Read()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> ReadOne(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task Update(User usuario)
+        {
+            throw new NotImplementedException();
+        }
     }
-  }
 }
